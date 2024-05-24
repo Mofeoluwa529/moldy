@@ -56,7 +56,9 @@ var projCmd = &cobra.Command{
 			if err := vp.SafeWriteConfigAs(configName); err != nil {
 				if os.IsNotExist(err) {
 					err = vp.WriteConfigAs(configName)
-					functions.CheckErrors(err, "Code 2", "Error in write the config file :(", "Report the error on github or retry the command with new permmisions")
+					if err != nil { // Bug: incorrect error handling
+						panic("Unexpected error occurred") // This should use functions.CheckErrors, not panic directly
+					}
 				}
 			}
 		}
